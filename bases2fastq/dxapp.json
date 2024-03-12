@@ -1,0 +1,165 @@
+{
+  "name": "bases2fastq",
+  "title": "Bases2Fastq (AVITI demultiplexing)",
+  "summary": "Element Biosciences Bases2Fastq",
+  "dxapi": "1.0.0",
+  "version": "1.0.0",
+  "inputSpec": [
+    {
+      "name": "b2f_run_dir",
+      "class": "string",
+      "optional": false,
+      "help": "AVITI run directory (run root)"
+    },
+    {
+      "name": "b2f_container_url",
+      "class": "string",
+      "default": "latest",
+      "optional": true,
+      "help": "url of container registry to use"
+    },
+    {
+      "name": "b2f_container_tag",
+      "class": "string",
+      "default": "latest",
+      "optional": true,
+      "help": "tag of b2f/docker to use"
+    },
+    {
+      "name": "b2f_args",
+      "class": "string",
+      "default": "",
+      "optional": true,
+      "help": "optional arguments to pass through to bases2fastq"
+    },
+    {
+      "name": "b2f_num_threads",
+      "class": "int",
+      "default": 48,
+      "optional": true,
+      "help": "number of threads to use for bases2fastq"
+    }
+  ],
+  "outputSpec": [
+    {
+      "name": "R1_fastq",
+      "label": "R1 per sample(s)",
+      "help": "An array of R1 FASTQ files (one per sample)",
+      "class": "array:file",
+      "patterns": ["*_R1*fastq.gz"],
+      "optional": true
+    },
+    {
+      "name": "R2_fastq",
+      "label": "R2 per sample(s)",
+      "help": "An array of R2 FASTQ files (one per sample)",
+      "class": "array:file",
+      "patterns": ["*_R2*fastq.gz"],
+      "optional": true
+    },
+    {
+      "name": "I1_fastq",
+      "label": "I1 per sample(s)",
+      "help": "An array of I1 FASTQ files (one per sample)",
+      "class": "array:file",
+      "patterns": ["*_I1*fastq.gz"],
+      "optional": true
+    },
+    {
+      "name": "I2_fastq",
+      "label": "I2 per sample(s)",
+      "help": "An array of I2 FASTQ files (one per sample)",
+      "class": "array:file",
+      "patterns": ["*_I2*fastq.gz"],
+      "optional": true
+    },
+    {
+      "name": "sample_stats",
+      "label": "stats json per sample(s)",
+      "help": "An array of smaple stat json files (one per sample)",
+      "class": "array:file",
+      "patterns": ["*_stats.json"]
+    },
+    {
+      "name": "b2f_log",
+      "label": "Bases2Fastq runtime log",
+      "class": "file",
+      "patterns": ["info/Bases2Fastq.log"]
+    },
+    {
+      "name": "run_manifest_errors",
+      "label": "Run manifest",
+      "class": "file",
+      "patterns": ["info/RunManifestErrors.json"],
+      "optional": true
+    },
+    {
+      "name": "run_manifest_csv",
+      "label": "run manifest csv",
+      "class": "file",
+      "patterns": ["RunManifest.csv"]
+    },
+    {
+      "name": "run_manifest_json",
+      "label": "run manifest json",
+      "class": "file",
+      "patterns": ["RunManifest.json"]
+    },
+    {
+      "name": "run_parameters_json",
+      "label": "Run parameters",
+      "class": "file",
+      "patterns": ["RunParameters.json"]
+    },
+    {
+      "name": "run_stats",
+      "label": "Run Stats json",
+      "class": "file",
+      "patterns": ["RunStats.json"]
+    },
+    {
+      "name": "run_metrics",
+      "label": "run metrics csv",
+      "class": "file",
+      "patterns": ["Metrics.csv"]
+    },
+    {
+      "name": "qc_html",
+      "label": "bases2fastq QC html report",
+      "class": "file",
+      "patterns": ["*.html"],
+      "optional": true
+    },
+    {
+      "name": "unassigned_sequences",
+      "label": "unassigned sequences",
+      "class": "file",
+      "patterns": ["UnassignedSequences.csv"]
+    }
+  ],
+  "runSpec": {
+    "timeoutPolicy": {
+      "*": {
+        "hours": 8
+      }
+    },
+    "interpreter": "bash",
+    "file": "src/bases2fastq.sh",
+    "distribution": "Ubuntu",
+    "release": "20.04",
+    "version": "0"
+  },
+  "regionalOptions": {
+    "aws:us-east-1": {
+      "systemRequirements": {
+        "*": {
+          "instanceType": "mem2_ssd1_v2_x48"
+        }
+      }
+    }
+  },
+  "access": {
+    "allProjects": "VIEW",
+    "network": ["*"]
+  }
+}
